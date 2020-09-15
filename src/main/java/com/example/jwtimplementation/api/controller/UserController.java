@@ -1,12 +1,14 @@
 package com.example.jwtimplementation.api.controller;
 
+import com.example.jwtimplementation.api.entities.RegisterUserDto;
 import com.example.jwtimplementation.api.entities.UserCredentials;
-import com.example.jwtimplementation.api.repository.UserRepository;
+import com.example.jwtimplementation.api.service.CustomUserDetailsService;
 import com.example.jwtimplementation.api.util.JwtUtil;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,10 +19,12 @@ public class UserController {
 
     private JwtUtil jwtUtil;
     private AuthenticationManager authenticationManager;
+    private CustomUserDetailsService customUserDetailsService;
 
-    public UserController(JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+    public UserController(JwtUtil jwtUtil, AuthenticationManager authenticationManager, CustomUserDetailsService customUserDetailsService) {
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @GetMapping("/")
@@ -44,5 +48,11 @@ public class UserController {
             throw new Exception(e.getCause());
         }
        return jwtUtil.generateToken(userCredentials.getUsername());
+    }
+
+    @PostMapping("/register")
+    public UserDetails registerUser(@RequestBody RegisterUserDto registerUserDto){
+        UserDetails userDetails = this.customUserDetailsService.registerUser(registerUserDto);
+        return userDetails;
     }
 }
