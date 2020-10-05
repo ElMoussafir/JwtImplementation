@@ -1,5 +1,7 @@
 package com.example.jwtimplementation.api.service;
 
+import com.example.jwtimplementation.api.auth.Email;
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,11 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(String to, String body, String subjet) {
+    public void sendEmail(Email email) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setSubject(subjet);
-        simpleMailMessage.setText(body);
-        simpleMailMessage.setTo(to);
-        simpleMailMessage.setFrom("noreply@vdab.be");
+        simpleMailMessage.setSubject(email.getSubject());
+        simpleMailMessage.setText(email.getText());
+        simpleMailMessage.setTo(email.getTo());
         this.javaMailSender.send(simpleMailMessage);
         System.out.println("Email has been send");
     }

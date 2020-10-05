@@ -48,9 +48,5 @@ public class JwtimplementationApplication {
 		SpringApplication.run(JwtimplementationApplication.class, args);
 	}
 
-	@EventListener(ApplicationReadyEvent.class)
-	public void triggerWhenStarts(){
-		this.emailService.sendEmail("omar_lam@hotmail.com", "Hello Omar, how are you ?", "Test EmailService");
-	}
 
 }
